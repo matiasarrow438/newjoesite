@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$HIM - High Influential Male</title>
+    <link rel="icon" type="image/x-icon" href="assets/high-influential-male.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            min-height: 200vh;
+            color: white;
+            position: relative;
+        }
+
+        .landing-section {
+            height: 100vh;
+            width: 100%;
+            background-image: url('assets/background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .rest-of-site {
+            min-height: 100vh;
+            background: url('gallery/backgroud.png') center/cover;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 2rem 0;
+            background-color: #1a1a1a;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 0.3rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgb(0, 0, 0);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            height: 70px;
+            margin: 0;
+            margin-right: 1rem;
+        }
+
+        .logo img {
+            height: 100%;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0;
+            padding: 0.2rem 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 0;
+        }
+
+        .social-icon {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .buy-button {
+            background: #4CAF50;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .buy-button:hover {
+            transform: scale(1.05);
+        }
+
+        .play-game-container {
+            display: none;
+        }
+
+        .play-game {
+            display: none;
+        }
+
+        #fixed-play-button {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            width: 400px;
+            text-align: center;
+        }
+
+        #fixed-play-button img {
+            width: 100%;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+
+        #fixed-play-button img:hover {
+            transform: scale(1.05);
+        }
+
+        .bottom-text {
+            display: none;
+        }
+
+        .control-button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+            padding: 0;
+        }
+
+        .control-button:hover {
+            transform: scale(1.1);
+        }
+
+        .more-dropdown {
+            display: none;
+        }
+
+        .now-playing {
+            color: white;
+            font-weight: bold;
+            min-width: 110px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+        }
+
+        .volume-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            width: 100px;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .volume-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .volume-icon {
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .content-wrapper {
+            padding-top: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content-section {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 4rem 2rem;
+            min-height: 100vh;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            color: white;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .white-space {
+            position: absolute;
+            top: 100vh;
+            left: 0;
+            right: 0;
+            height: 100vh;
+            background: white;
+        }
+
+        .gallery-container {
+            max-width: 800px;
+            width: 90%;
+            position: relative;
+            margin: 0 auto;
+            padding: 0 4rem;
+        }
+
+        .gallery-slide {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .gallery-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-nav {
+            position: absolute;
+            top: 65%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+
+        .gallery-nav:hover {
+            background: rgba(0, 0, 0, 1);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .gallery-prev {
+            left: -60px;
+        }
+
+        .gallery-next {
+            right: -60px;
+        }
+
+        .gallery-counter {
+            display: none;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            text-shadow: 0 0 10px #fff,
+                        0 0 20px #fff,
+                        0 0 30px #fff,
+                        0 0 40px #0ff;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-20px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        .scroll-indicator.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .post-button {
+            display: block;
+            width: 600px;
+            margin: 2rem auto 3rem auto;
+            transition: transform 0.3s ease;
+        }
+
+        .post-button:hover {
+            transform: scale(1.05);
+        }
+
+        .post-button img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="landing-section">
+        <nav class="nav">
+            <div class="nav-left">
+                <div class="logo">
+                    <img src="assets/5.png" alt="$HIM Logo">
+                </div>
+                <div class="player-controls">
+                    <span class="now-playing">PLAYING YE</span>
+                    <button class="control-button" onclick="previousTrack()">←</button>
+                    <button class="control-button" id="playPauseBtn" onclick="togglePlay()">▶</button>
+                    <button class="control-button" onclick="nextTrack()">→</button>
+                    <audio id="audioPlayer">
+                        <source src="music/ye.mp3" type="audio/mp3">
+                    </audio>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div style="color: white; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="opacity: 0.9;">Official CA:</span>
+                    <span style="background: rgba(255, 255, 255, 0.1); padding: 0.3rem 0.8rem; border-radius: 20px;">Coming Soon</span>
+                </div>
+                <a href="https://x.com/influentialmeme" target="_blank"><img src="assets/4.png" alt="Twitter" class="social-icon"></a>
+                <a href="https://t.me/HighInfluentialMales" target="_blank"><img src="assets/3.png" alt="Telegram" class="social-icon"></a>
+                <a href="https://pump.fun" target="_blank" class="buy-button">BUY $HIM</a>
+            </div>
+        </nav>
+
+        <a href="minigame.html" id="fixed-play-button">
+            <img src="assets/1.png" alt="Play Game">
+        </a>
+
+        <div class="volume-control">
+            <span class="volume-icon" onclick="toggleMute()">🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="100" onchange="updateVolume(this.value)">
+        </div>
+
+        <div class="scroll-indicator">↓</div>
+    </div>
+
+    <div class="rest-of-site">
+        <div class="gallery-container">
+            <a href="https://x.com/intent/post?text=I%20AM%20%24HIM" target="_blank" class="post-button">
+                <img src="gallery/post.png" alt="Post on X">
+            </a>
+            <div class="gallery-slide">
+                <img src="gallery/1.png" alt="Meme 1" id="memeImage">
+            </div>
+            <button class="gallery-nav gallery-prev" onclick="prevMeme()">←</button>
+            <button class="gallery-nav gallery-next" onclick="nextMeme()">→</button>
+        </div>
+    </div>
+
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const nowPlaying = document.querySelector('.now-playing');
+        
+        const tracks = [
+            { src: 'music/ye.mp3', name: 'PLAYING YE' },
+            { src: 'music/travis.mp3', name: 'PLAYING TRAVIS' },
+            { src: 'music/weekend.mp3', name: 'PLAYING WEEKEND' }
+        ];
+        
+        let currentTrackIndex = 0;
+        let lastVolume = 1;
+
+        function loadTrack(index) {
+            const track = tracks[index];
+            audioPlayer.src = track.src;
+            nowPlaying.textContent = track.name;
+            playPauseBtn.textContent = '▶';
+        }
+
+        function togglePlay() {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playPauseBtn.textContent = '⏸';
+            } else {
+                audioPlayer.pause();
+                playPauseBtn.textContent = '▶';
+            }
+        }
+
+        function nextTrack() {
+            currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+            loadTrack(currentTrackIndex);
+        }
+
+        function previousTrack() {
+            currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+            loadTrack(currentTrackIndex);
+        }
+
+        function updateVolume(value) {
+            const volume = value / 100;
+            audioPlayer.volume = volume;
+            const volumeIcon = document.querySelector('.volume-icon');
+            volumeIcon.textContent = volume === 0 ? '🔇' : volume < 0.5 ? '🔉' : '🔊';
+            lastVolume = volume;
+        }
+
+        function toggleMute() {
+            if (audioPlayer.volume > 0) {
+                lastVolume = audioPlayer.volume;
+                audioPlayer.volume = 0;
+                document.querySelector('.volume-slider').value = 0;
+                document.querySelector('.volume-icon').textContent = '🔇';
+            } else {
+                audioPlayer.volume = lastVolume;
+                document.querySelector('.volume-slider').value = lastVolume * 100;
+                document.querySelector('.volume-icon').textContent = lastVolume < 0.5 ? '🔉' : '🔊';
+            }
+        }
+
+        // Auto-play first track
+        window.addEventListener('load', () => {
+            loadTrack(currentTrackIndex);
+            updateVolume(100);
+        });
+
+        // Loop when track ends
+        audioPlayer.addEventListener('ended', () => {
+            nextTrack();
+        });
+
+        // Meme gallery code
+        const memeImage = document.getElementById('memeImage');
+        const galleryCounter = document.querySelector('.gallery-counter');
+        let currentMeme = 1;
+        const totalMemes = 13;
+
+        function updateMeme() {
+            let adjustedMeme = currentMeme;
+            if (currentMeme > 4) {
+                adjustedMeme++;
+            }
+            const extension = adjustedMeme === 7 ? '.jpeg' : '.png';
+            memeImage.src = `gallery/${adjustedMeme}${extension}`;
+            galleryCounter.textContent = `${currentMeme} / ${totalMemes}`;
+        }
+
+        function nextMeme() {
+            currentMeme = currentMeme === totalMemes ? 1 : currentMeme + 1;
+            updateMeme();
+        }
+
+        function prevMeme() {
+            currentMeme = currentMeme === 1 ? totalMemes : currentMeme - 1;
+            updateMeme();
+        }
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextMeme();
+            if (e.key === 'ArrowLeft') prevMeme();
+        });
+
+        // Scroll indicator functionality
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                scrollIndicator.classList.add('hidden');
+            } else {
+                scrollIndicator.classList.remove('hidden');
+            }
+        });
+
+        scrollIndicator.addEventListener('click', () => {
+            window.scrollTo({
+                top: window.innerHeight,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html> 

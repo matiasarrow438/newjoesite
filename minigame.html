@@ -173,6 +173,73 @@
             z-index: 3;
             text-align: right;
         }
+
+        .music-controls {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            color: #ff0000;
+            font-family: 'Gagalin', sans-serif;
+        }
+
+        .player-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .control-button {
+            background: none;
+            border: none;
+            color: #ff0000;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 5px;
+            transition: transform 0.2s ease;
+        }
+
+        .control-button:hover {
+            transform: scale(1.1);
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            width: 100px;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 0, 0, 0.3);
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff0000;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .volume-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .now-playing {
+            font-size: 0.8rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -195,6 +262,22 @@
         <h2>GAME OVER</h2>
         <p>Final Score: <span id="final-score">0</span></p>
         <button onclick="restartGame()">Play Again</button>
+    </div>
+
+    <div class="music-controls">
+        <div class="now-playing">PLAYING YE</div>
+        <div class="player-buttons">
+            <button class="control-button" onclick="previousTrack()">←</button>
+            <button class="control-button" id="playPauseBtn" onclick="togglePlay()">▶</button>
+            <button class="control-button" onclick="nextTrack()">→</button>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="volume-icon" onclick="toggleMute()">🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="50" onchange="updateVolume(this.value)">
+        </div>
+        <audio id="audioPlayer">
+            <source src="music/ye.mp3" type="audio/mp3">
+        </audio>
     </div>
 
     <script>
@@ -418,6 +501,80 @@
         setInterval(createMoney, 1500);
         setInterval(createBomb, 3000);
         setInterval(createSpeedBoost, 10000);
+
+        // Music player code
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const nowPlaying = document.querySelector('.now-playing');
+        
+        const tracks = [
+            { src: 'music/ye.mp3', name: 'PLAYING YE' },
+            { src: 'music/travis.mp3', name: 'PLAYING TRAVIS' },
+            { src: 'music/weekend.mp3', name: 'PLAYING WEEKEND' },
+            { src: 'music/Metro Boomin.mp3', name: 'PLAYING METRO BOOMIN' }
+        ];
+        
+        let currentTrackIndex = 0;
+        let lastVolume = 1;
+
+        function loadTrack(index) {
+            const track = tracks[index];
+            audioPlayer.src = track.src;
+            nowPlaying.textContent = track.name;
+            playPauseBtn.textContent = '▶';
+        }
+
+        function togglePlay() {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playPauseBtn.textContent = '⏸';
+            } else {
+                audioPlayer.pause();
+                playPauseBtn.textContent = '▶';
+            }
+        }
+
+        function nextTrack() {
+            currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+            loadTrack(currentTrackIndex);
+        }
+
+        function previousTrack() {
+            currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+            loadTrack(currentTrackIndex);
+        }
+
+        function updateVolume(value) {
+            const volume = value / 100;
+            audioPlayer.volume = volume;
+            const volumeIcon = document.querySelector('.volume-icon');
+            volumeIcon.textContent = volume === 0 ? '🔇' : volume < 0.5 ? '🔉' : '🔊';
+            lastVolume = volume;
+        }
+
+        function toggleMute() {
+            if (audioPlayer.volume > 0) {
+                lastVolume = audioPlayer.volume;
+                audioPlayer.volume = 0;
+                document.querySelector('.volume-slider').value = 0;
+                document.querySelector('.volume-icon').textContent = '🔇';
+            } else {
+                audioPlayer.volume = lastVolume;
+                document.querySelector('.volume-slider').value = lastVolume * 100;
+                document.querySelector('.volume-icon').textContent = lastVolume < 0.5 ? '🔉' : '🔊';
+            }
+        }
+
+        // Auto-play first track
+        window.addEventListener('load', () => {
+            loadTrack(currentTrackIndex);
+            updateVolume(50);
+        });
+
+        // Loop when track ends
+        audioPlayer.addEventListener('ended', () => {
+            nextTrack();
+        });
     </script>
 </body>
 </html>

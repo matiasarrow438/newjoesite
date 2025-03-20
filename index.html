@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>$HIM - High Influential Male</title>
+    <title>$HIM - High Influential Memes</title>
     <link rel="icon" type="image/x-icon" href="assets/high-influential-male.png">
     <style>
         * {
@@ -366,6 +366,25 @@
             width: 100%;
             height: auto;
         }
+
+        .music-player {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .song-select {
+            background: none;
+            border: 2px solid #ff0000;
+            color: #ff0000;
+            padding: 5px;
+            font-family: 'Gagalin', sans-serif;
+            cursor: pointer;
+        }
+
+        .song-select option {
+            background: black;
+        }
     </style>
 </head>
 <body>
@@ -402,7 +421,7 @@
 
         <div class="volume-control">
             <span class="volume-icon" onclick="toggleMute()">🔊</span>
-            <input type="range" class="volume-slider" min="0" max="100" value="100" onchange="updateVolume(this.value)">
+            <input type="range" class="volume-slider" min="0" max="100" value="50" onchange="updateVolume(this.value)">
         </div>
 
         <div class="scroll-indicator">↓</div>
@@ -429,7 +448,8 @@
         const tracks = [
             { src: 'music/ye.mp3', name: 'PLAYING YE' },
             { src: 'music/travis.mp3', name: 'PLAYING TRAVIS' },
-            { src: 'music/weekend.mp3', name: 'PLAYING WEEKEND' }
+            { src: 'music/weekend.mp3', name: 'PLAYING WEEKEND' },
+            { src: 'music/Metro Boomin.mp3', name: 'PLAYING METRO BOOMIN' }
         ];
         
         let currentTrackIndex = 0;
@@ -486,7 +506,7 @@
         // Auto-play first track
         window.addEventListener('load', () => {
             loadTrack(currentTrackIndex);
-            updateVolume(100);
+            updateVolume(50);
         });
 
         // Loop when track ends
@@ -543,6 +563,18 @@
                 behavior: 'smooth'
             });
         });
+
+        const audio = new Audio();
+        let isPlaying = false;
+        
+        function changeSong(src) {
+            const wasPlaying = !audio.paused;
+            audio.src = src;
+            if (wasPlaying) {
+                audio.play();
+                document.getElementById('playButton').textContent = 'Pause';
+            }
+        }
     </script>
 </body>
 </html> 
